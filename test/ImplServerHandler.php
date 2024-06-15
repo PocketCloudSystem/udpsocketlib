@@ -20,7 +20,7 @@ class ImplServerHandler implements IServerHandler {
      */
     public function messageReceived(Address $address, $message): void {
         echo "[$address] Data received from client: $message\n";
-        Network::getInstance()->getSocket()->write(new TextObject("anfrage wurde erhalten du hurensohn"), $address);
+        Network::getInstance()->getSocket()->write(new TextObject("anfrage wurde erhalten"), $address);
     }
 
     /**

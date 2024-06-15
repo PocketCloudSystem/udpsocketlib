@@ -33,9 +33,8 @@ class JsonBuffer {
         return $this->write($data);
     }
 
-    /** @throws JsonException */
     public function writeArray(array $data): self {
-        return $this->write(json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE));
+        return $this->write($data);
     }
 
     public function read(): mixed {
@@ -59,13 +58,14 @@ class JsonBuffer {
         return $this->read();
     }
 
-    /**
-     * @throws JsonException
-     */
     public function readArray(): ?array {
-        $string = $this->readString();
-        if ($string === null) return null;
-        return json_decode($string, true, flags: JSON_THROW_ON_ERROR);
+        $array = $this->read();
+        if (!is_array($array)) return null;
+        return $array;
+    }
+
+    public function getRawData(): array {
+        return $this->data;
     }
 
     /** @throws JsonException */

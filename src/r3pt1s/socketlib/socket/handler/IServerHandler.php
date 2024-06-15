@@ -10,6 +10,8 @@ interface IServerHandler {
 
     public function bound(Address $address): void;
 
+    public function close(): void;
+
     /**
      * @param Address $address
      * @param TValue $message

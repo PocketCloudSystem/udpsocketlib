@@ -66,7 +66,8 @@ class SocketClient extends Thread {
         try {
             if ($this->connected) throw new LogicException("The socket is already connected to " . $this->address . "!");
             if ($this->socket === null) $this->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
-            $this->connected = socket_connect($this->socket, $this->address->getAddress(), $this->address->getPort());
+            $this->connected = @socket_connect($this->socket, $this->address->getAddress(), $this->address->getPort());
+            if (!$this->connected) throw new LogicException("The socket is already connected to " . $this->address . "!");
             $this->options->apply($this->socket);
             Network::getInstance()->getHandler()?->connected($this->address);
         } catch (Throwable $exception) {
@@ -90,6 +91,7 @@ class SocketClient extends Thread {
 
     public function close(): void {
         if ($this->connected) {
+            Network::getInstance()->getHandler()?->close();
             socket_close($this->socket);
             $this->connected = false;
         }

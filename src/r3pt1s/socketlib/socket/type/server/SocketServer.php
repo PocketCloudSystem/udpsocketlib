@@ -65,13 +65,15 @@ class SocketServer extends Thread {
     public function init(): void {
         if ($this->bound) throw new LogicException("The socket is already bound to " . $this->address . "!");
         $this->socket = @socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
-        $this->bound = socket_bind($this->socket, $this->address->getAddress(), $this->address->getPort());
+        $this->bound = @socket_bind($this->socket, $this->address->getAddress(), $this->address->getPort());
+        if (!$this->bound) throw new LogicException("The socket is already bound to " . $this->address . "!");
         $this->options->apply($this->socket);
         Network::getInstance()->getHandler()?->bound($this->address);
     }
 
     public function close(): void {
         if ($this->bound) {
+            Network::getInstance()->getHandler()?->close();
             socket_close($this->socket);
             $this->bound = false;
         }

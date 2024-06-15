@@ -10,6 +10,8 @@ interface IClientHandler {
 
     public function connected(Address $address): void;
 
+    public function close(): void;
+
     /**
      * @param TValue $message
      * @return void
